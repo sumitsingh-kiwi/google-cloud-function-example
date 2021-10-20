@@ -1,0 +1,13 @@
+steps:
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    args: 
+    - gcloud
+    - functions
+    - deploy
+    - subscribe
+    - --region=us-central1
+    - --source=google-pub-sub-example
+    - --trigger-topic 
+    - queueDemo
+    - --runtime=python37
+
