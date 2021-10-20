@@ -1,5 +1,13 @@
 steps:
-  - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: 'bash'
-    args: ['./script.sh']
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
+    args: 
+    - gcloud
+    - functions
+    - deploy
+    - subscribe
+    - --region=us-central1
+    - --source=google-pub-sub-example
+    - --trigger-topic 
+    - queueDemo
+    - --runtime=python37
 
