@@ -1,0 +1,27 @@
+# openapi2-functions.yaml
+swagger: '2.0'
+info:
+  title: Integration Layer
+  description: Integration Layer Api's Gateway
+  version: 1.0.0
+schemes:
+  - https
+produces:
+  - application/json
+  - application/xml
+
+paths:
+  /hello:
+    get:
+      summary: Get Property types
+      operationId: get-all-properties-type
+      x-google-backend:
+        deadline: 600
+        path_translation: APPEND_PATH_TO_ADDRESS
+        address: https://helloworld-ywkd3aaksq-uc.a.run.app/
+      responses:
+        '200':
+          description: A successful response
+          schema:
+            type: string
+
