@@ -1,3 +1,16 @@
 steps:
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    args: ['gcloud', 'functions', 'deploy', 'leasera', '--region=us-central1', '--source=google-function-example', '--trigger-http', '--runtime=python37']
+  # Build the container image
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/${_MY_PROJECT}/helloworld', 'hello_world']
+  # Push the container image to Container Registry
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/${_MY_PROJECT}/helloworld']
+  # Deploy container image to Cloud Run
+  - name: 'gcr.io/cloud-builders/gcloud'
+    #entrypoint: gcloud
+    args: ['run', 'deploy', 'helloworld', '--image', 'gcr.io/$PROJECT_ID/helloworld', '--region', 'us-central1']
+    #, '--service-account', '$PROJECT_ID@appspot.gserviceaccount.com']
+images:
+  - gcr.io/$PROJECT_ID/helloworld
+options:
+     dynamic_substitutions: true
