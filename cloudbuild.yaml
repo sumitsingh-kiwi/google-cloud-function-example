@@ -1,4 +1,4 @@
 steps:
-  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
-    entrypoint: /bin/bash
-    args: ['sh', 'script.sh']
+  - name: "gcr.io/cloud-builders/gcloud"
+    args: ['gcloud', 'functions', 'deploy', 'leasera', '--region=us-central1', '--source=google-function-example', '--trigger-http', '--runtime=python37']
+
