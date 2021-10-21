@@ -1,4 +1,3 @@
 steps:
-  - name: "gcr.io/cloud-builders/gcloud"
+  - name: "gcr.io/google.com/cloudsdktool/cloud-sdk"
     args: ['gcloud', 'functions', 'deploy', 'leasera', '--region=us-central1', '--source=google-function-example', '--trigger-http', '--runtime=python37']
-
