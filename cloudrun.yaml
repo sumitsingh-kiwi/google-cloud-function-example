@@ -1,14 +1,16 @@
 steps:
   # Build the container image
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['build', '-t', 'gcr.io/leasera-200719/helloworld', 'hello_world']
+    args: ['build', '-t', 'gcr.io/${_MY_PROJECT}/helloworld', 'hello_world']
   # Push the container image to Container Registry
   - name: 'gcr.io/cloud-builders/docker'
-    args: ['push', 'gcr.io/leasera-200719/helloworld']
+    args: ['push', 'gcr.io/${_MY_PROJECT}/helloworld']
   # Deploy container image to Cloud Run
-  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
-    entrypoint: gcloud
-    args: ['run', 'deploy', 'helloworld', '--image', 'gcr.io/leasera-200719/helloworld', '--region', 'us-central1']
-    #, '--service-account', 'leasera-200719@appspot.gserviceaccount.com']
+  - name: 'gcr.io/cloud-builders/gcloud'
+    #entrypoint: gcloud
+    args: ['run', 'deploy', 'helloworld', '--image', 'gcr.io/$PROJECT_ID/helloworld', '--region', 'us-central1']
+    #, '--service-account', '$PROJECT_ID@appspot.gserviceaccount.com']
 images:
-  - gcr.io/leasera-200719/helloworld
+  - gcr.io/$PROJECT_ID/helloworld
+options:
+     dynamic_substitutions: true
