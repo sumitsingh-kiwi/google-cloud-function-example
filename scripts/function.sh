@@ -10,4 +10,3 @@ gcloud functions deploy leasera --region=us-central1 --source=google-function-ex
 #gcloud functions deploy publish --region=us-central1 --source=google-pub-sub-example --trigger-http --runtime=python37
 
 #gcloud functions deploy subscribe --region=us-central1 --source=google-pub-sub-example --trigger-topic queueDemo --runtime=python37
-
