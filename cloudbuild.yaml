@@ -4,7 +4,15 @@ steps:
     args: 
      - '-c'
      - |
-        if [[ $(git diff "$(git rev-parse @)" "$(git rev-parse @~)" scripts/*)]];then
-        gcloud functions deply leasera --region=us-central1 --source=google-function-example --trigger-http --runtime=python37
+        PREVIOUS_SUCCESS=$$(gcloud builds list --filter "status='SUCCESS' AND buildTriggerId=${_TRIGGER_ID}" | sed -n 2p | cut -d" " -f1);
+        echo $$PREVIOUS_SUCCESS;
+        if [ $$PREVIOUS_SUCCESS != "" ]; then
+           PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n 37p | cut -d" " -f4);
+           echo $$PREVIOUS_COMMIT
+           if [[ $$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*) ]]; 
+              then
+                 
+                 gcloud functions deploy leasera --region=us-central1 --source=google-function-example --trigger-http --runtime=python37
+           fi
         fi
 
