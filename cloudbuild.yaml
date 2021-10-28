@@ -22,5 +22,5 @@ steps:
     #             echo "function deployed successfully"
     #       fi
     #    fi
-    args: ["scripts/functions.sh"]
+    args: ["scripts/function.sh"]
 
