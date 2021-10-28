@@ -8,11 +8,13 @@ steps:
         echo $$PREVIOUS_SUCCESS;
         if [ $$PREVIOUS_SUCCESS != "" ]; then
            PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n 37p | cut -d" " -f4);
-           echo $$PREVIOUS_COMMIT
+           echo "previous commit id is " $$PREVIOUS_COMMIT 
+           echo "new commti id is " $COMMIT_SHA
            if [[ $$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*) ]]; 
               then
-                 
+                 echo "going to build the leasera function"
                  gcloud functions deploy leasera --region=us-central1 --source=google-function-example --trigger-http --runtime=python37
+                 echo "function deployed successfully"
            fi
         fi
 
