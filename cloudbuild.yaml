@@ -1,25 +1,26 @@
 steps:
   - name: "gcr.io/cloud-builders/gcloud"
-    entrypoint: 'bash'
-    args: 
-     - '-c'
-     - |
-        PREVIOUS_SUCCESS=$$(gcloud builds list --filter "status='SUCCESS' AND buildTriggerId=${_TRIGGER_ID}" | sed -n 2p | cut -d" " -f1);
-        echo $$PREVIOUS_SUCCESS;
-        if [ $$PREVIOUS_SUCCESS != "" ]; then
-           LINE=$$(gcloud builds describe $$PREVIOUS_SUCCESS | tr '\n' '\n' | grep -Fn COMMIT_SHA | cut -f1 -d: | sed -n 2p)
-           LINE="$${LINE}p"
-           echo "line number is" $$LINE
-           PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n $$LINE | cut -d" " -f4);
-           echo "previous commit id is " $$PREVIOUS_COMMIT 
-           echo "new commti id is " $COMMIT_SHA
-           DIFF=$$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*);
-           echo "the difference is" $$DIFF
-           if [ "$$DIFF" != "" ]; 
-              then
-                 echo "going to build the leasera function"
-                 gcloud functions deploy leasera --region=us-central1 --source=google-function-example --trigger-http --runtime=python37
-                 echo "function deployed successfully"
-           fi
-        fi
+    #entrypoint: 'bash'
+    #args: 
+    # - '-c'
+    # - |
+    #    PREVIOUS_SUCCESS=$$(gcloud builds list --filter "status='SUCCESS' AND buildTriggerId=${_TRIGGER_ID}" | sed -n 2p | cut -d" " -f1);
+    #    echo $$PREVIOUS_SUCCESS;
+    #    if [ $$PREVIOUS_SUCCESS != "" ]; then
+    #       LINE=$$(gcloud builds describe $$PREVIOUS_SUCCESS | tr '\n' '\n' | grep -Fn COMMIT_SHA | cut -f1 -d: | sed -n 2p)
+    #       LINE="$${LINE}p"
+    #       echo "line number is" $$LINE
+    #       PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n $$LINE | cut -d" " -f4);
+    #       echo "previous commit id is " $$PREVIOUS_COMMIT 
+    #       echo "new commti id is " $COMMIT_SHA
+    #       DIFF=$$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*);
+    #       echo "the difference is" $$DIFF
+    #       if [ "$$DIFF" != "" ]; 
+    #          then
+    #             echo "going to build the leasera function"
+    #             gcloud functions deploy leasera --region=us-central1 --source=google-function-example --trigger-http --runtime=python37
+    #             echo "function deployed successfully"
+    #       fi
+    #    fi
+    args: ["scripts/functions.sh"]
 
