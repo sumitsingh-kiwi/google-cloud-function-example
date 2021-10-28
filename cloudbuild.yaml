@@ -13,9 +13,9 @@ steps:
            PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n $$LINE | cut -d" " -f4);
            echo "previous commit id is " $$PREVIOUS_COMMIT 
            echo "new commti id is " $COMMIT_SHA
-           echo "commit diff is" 
-           $$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*);
-           if [[ $$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*) ]]; 
+           DIFF=$$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*);
+           echo "the difference is" $$DIFF
+           if [ "$$DIFF" != "" ]; 
               then
                  echo "going to build the leasera function"
                  gcloud functions deploy leasera --region=us-central1 --source=google-function-example --trigger-http --runtime=python37
