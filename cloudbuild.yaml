@@ -7,7 +7,10 @@ steps:
         PREVIOUS_SUCCESS=$$(gcloud builds list --filter "status='SUCCESS' AND buildTriggerId=${_TRIGGER_ID}" | sed -n 2p | cut -d" " -f1);
         echo $$PREVIOUS_SUCCESS;
         if [ $$PREVIOUS_SUCCESS != "" ]; then
-           PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n 37p | cut -d" " -f4);
+           LINE=$$(gcloud builds describe PREVIOUS_SUCCESS | tr '\n' '\n' | grep -Fn substitutions | cut -f1 -d:)
+           LINE=$$(($$LINE + 2))
+           echo "line number is" $$LINE
+           PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n $$LINEp | cut -d" " -f4);
            echo "previous commit id is " $$PREVIOUS_COMMIT 
            echo "new commti id is " $COMMIT_SHA
            echo "commit diff is" 
