@@ -10,6 +10,8 @@ steps:
            PREVIOUS_COMMIT=$$(gcloud builds describe $$PREVIOUS_SUCCESS | sed -n 37p | cut -d" " -f4);
            echo "previous commit id is " $$PREVIOUS_COMMIT 
            echo "new commti id is " $COMMIT_SHA
+           echo "commit diff is" 
+           $$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*);
            if [[ $$(git diff $COMMIT_SHA $$PREVIOUS_COMMIT scripts/*) ]]; 
               then
                  echo "going to build the leasera function"
