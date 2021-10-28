@@ -1,7 +1,7 @@
 #!/bin/bash
 
 TIME=`date +%b-%d-%y`
-FILENAME=backup-$TIME
+FILENAME=Leasera-functions-backup-$TIME
 tar -czvf $FILENAME.tar.gz .
 gsutil cp $FILENAME.tar.gz gs://build-code-backup/
 

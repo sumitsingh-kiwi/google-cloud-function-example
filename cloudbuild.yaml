@@ -1,4 +1,10 @@
 steps:
   - name: "gcr.io/cloud-builders/gcloud"
     entrypoint: 'bash'
-    args: ['scripts/cloudrun.sh']
+    args: 
+     - '-c'
+     - |
+        if [[ $(git diff "$(git rev-parse @)" "$(git rev-parse @~)" scripts/*)]];then
+        gcloud functions deply leasera --region=us-central1 --source=google-function-example --trigger-http --runtime=python37
+        fi
+
