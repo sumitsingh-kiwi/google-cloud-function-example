@@ -13,17 +13,11 @@ jobs:
       with:
         fetch-depth: 100
 
-    - name: Extract branch name
-      shell: bash
-      run: echo "::set-env name=BRANCH_NAME::$(echo ${GITHUB_REF#refs/heads/})"
-      id: extract_branch
-
-
     - name: Determine GCP Project
       uses: haya14busa/action-cond@v1
       id: determine-gcp-project
       with:
-        cond: ${{ $BRANCH_NAME == "Dev" }}
+        cond: ${{ github.ref == "Dev" }}
         if_true: '12345'  # string value
         if_false: ${{ secrets.GCP_PROJECT }} # string value
 
