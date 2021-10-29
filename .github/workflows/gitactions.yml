@@ -10,11 +10,13 @@ jobs:
     steps:
     - name: Checkout
       uses: actions/checkout@master
+      with:
+        fetch-depth: 100
 
     # Setup gcloud CLI
-    - uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+    - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        service_account_email: ${{ secrets.GCP_EMAIL }}
+        project_id: ${{ secrets.GCP_PROJECT }}
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
 
