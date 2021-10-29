@@ -21,10 +21,10 @@ jobs:
         export_default_credentials: true
 
     - name: Check HelloWorld changes...
-        uses: marceloprado/has-changed-path@v1
-        id: helloworld
-        with:
-          paths: hello_world/**
+      uses: marceloprado/has-changed-path@v1
+      id: helloworld
+      with:
+        paths: hello_world/**
 
       # Deploy the Docker image to the GKE cluster
     - name: Deploy
