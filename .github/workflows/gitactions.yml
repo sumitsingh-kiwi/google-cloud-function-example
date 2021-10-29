@@ -17,12 +17,12 @@ jobs:
       uses: haya14busa/action-cond@v1
       id: determine-gcp-project
       with:
-        cond: ${{ github.ref == 'Dev' }}
+        cond: ${{ github.ref == 'master' }}
         if_true: '12345'  # string value
         if_false: ${{ secrets.GCP_PROJECT }} # string value
 
     - name: Use conditional value
-      run: echo "${{ steps.determine-gcp-project.outputs.value }}"
+      run: echo "${{ github.ref }}"
 
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0.2.0
