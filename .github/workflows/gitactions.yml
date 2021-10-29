@@ -20,11 +20,17 @@ jobs:
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
 
-    # Deploy the Docker image to the GKE cluster
+    - name: Check HelloWorld changes...
+        uses: marceloprado/has-changed-path@v1
+        id: helloworld
+        with:
+          paths: hello_world/**
+
+      # Deploy the Docker image to the GKE cluster
     - name: Deploy
+      if: steps.helloworld.outputs.changed == 'true'
       run: |
         gcloud run deploy helloworld --source=hello_world --service-account ${{ secrets.GCP_EMAIL }} \
-        --platform managed \
-        --allow-unauthenticated \
-        --region=us-central1
-        --memory 512M
+        --platform managed --allow-unauthenticated --region=us-central1 \
+        --set-env-vars=[LOCATION_GQL_URL="http://us-central1-leasera-200719.cloudfunctions.net/location", \
+        THIRD_PARTY_AUTH_URL="https://us-central1-leasera-200719.cloudfunctions.net/third_party_auth"]
