@@ -13,11 +13,14 @@ jobs:
       with:
         fetch-depth: 100
 
+    - uses: nelonoel/branch-name@v1.0.1
+      run: echo ${BRANCH_NAME}
+
     - name: Determine GCP Project
       uses: haya14busa/action-cond@v1
       id: determine-gcp-project
       with:
-        cond: ${{ ${GITHUB_REF#refs/heads/} == "Dev" }}
+        cond: ${{ ${BRANCH_NAME} == "Dev" }}
         if_true: '12345'  # string value
         if_false: ${{ secrets.GCP_PROJECT }} # string value
 
