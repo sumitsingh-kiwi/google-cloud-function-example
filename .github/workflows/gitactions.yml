@@ -13,23 +13,26 @@ jobs:
       with:
         fetch-depth: 100
 
-    - name: Determine GCP Project
-      if: github.ref == 'refs/heads/Dev'
-      run: echo "PROJECT_ID=$(echo $GCP_EMAIL)" >> $GITHUB_ENV
+    - name: Set variables
+      id: setvars
+      run: |
+        if [[ "${{github.ref}}" == "refs/heads/Dev" ]]; then
+          echo "::set-output name=gcloud_project::${{ GCP_PROJECT }}"
+          echo "::set-output name=gcloud_settings::dev"
+        fi
 
-    - name: Determine GCP Project
-      if: github.ref == 'refs/heads/master'
-      run: echo "PROJECT_ID=${GCP_PROJECT}" >> $GITHUB_ENV
-
+        if [[ "${{github.ref}}" == "refs/heads/master" ]]; then
+          echo "::set-output name=gcloud_project::master"
+          echo "::set-output name=gcloud_settings::master"
+        fi
 
     - name: Use conditional value
-      run : echo "${{ env.PROJECT_ID }}"
-#      run: echo "${{ github.ref }}"
+      run: echo "${{ steps.setvars.outputs.gcloud_project }}"
 
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        project_id: ${PROJECT_ID}
+        project_id: ${{ steps.setvars.outputs.gcloud_project }}
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
 
