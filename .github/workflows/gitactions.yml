@@ -23,7 +23,7 @@ jobs:
 
 
     - name: Use conditional value
-      run : echo "${PROJECT_ID}"
+      run : echo "${{ env.PROJECT_ID }}"
 #      run: echo "${{ github.ref }}"
 
     # Setup gcloud CLI
