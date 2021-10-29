@@ -13,10 +13,21 @@ jobs:
       with:
         fetch-depth: 100
 
+    - name: Determine GCP Project
+      uses: haya14busa/action-cond@v1
+      id: determine-gcp-project
+      with:
+        cond: ${{ ${GITHUB_REF#refs/heads/} == "Dev" }}
+        if_true: '12345'  # string value
+        if_false: ${{ secrets.GCP_PROJECT }} # string value
+
+    - name: Use conditional value
+      run: echo "${{ steps.determine-gcp-project.outputs.value }}"
+
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
-        project_id: ${{ secrets.GCP_PROJECT }}
+        project_id: ${{ steps.determine-gcp-project.outputs.value }}
         service_account_key: ${{ secrets.GCP_CREDENTIALS }}
         export_default_credentials: true
 
