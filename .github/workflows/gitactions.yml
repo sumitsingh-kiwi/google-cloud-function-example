@@ -19,7 +19,7 @@ jobs:
 
     - name: Determine GCP Project
       if: github.ref == 'refs/heads/master'
-      run: echo "PROJECT_ID=$GCP_PROJECT" >> $GITHUB_ENV
+      run: echo "PROJECT_ID=${{GCP_PROJECT}}" >> $GITHUB_ENV
 
 
     - name: Use conditional value
