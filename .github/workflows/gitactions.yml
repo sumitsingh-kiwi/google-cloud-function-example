@@ -27,7 +27,7 @@ jobs:
 
         if [[ "${{github.ref}}" == "refs/heads/Dev" ]]; then
           echo "::set-output name=gcloud_project::$DEV_GCP_PROJECT"
-          echo "gcloud_settings=${{ secrets.GCP_CREDENTIALS }}" >> $GITHUB_ENV
+          echo "::set-output name=gcloud_credentials::$DEV_GCP_CREDENTIALS"
         fi
 
     - name: Use conditional value
@@ -37,7 +37,7 @@ jobs:
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
         project_id: ${{ steps.setvars.outputs.gcloud_project }}
-        service_account_key: ${{ steps.setvars.outputs.gcloud_settings }}
+        service_account_key: ${{ steps.setvars.outputs.gcloud_credentials }}
         export_default_credentials: true
 
     - name: Check HelloWorld changes...
