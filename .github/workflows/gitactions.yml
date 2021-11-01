@@ -10,6 +10,8 @@ jobs:
     env:
       DEV_GCM_PROJECT: ${{ secrets.GCM_PROJECT }}
       MASTER_GCM_PROJECT: "master"
+      DEV_GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
+      MASTER_GCP_CREDENTIALS: "master"
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -21,22 +23,22 @@ jobs:
       run: |
         if [[ "${{github.ref}}" == "refs/heads/master" ]]; then
           echo "::set-output name=gcloud_project::$MASTER_GCP_PROJECT"
-          echo "::set-output name=gcloud_settings::dev"
+          echo "::set-output name=gcloud_credentials::$MASTER_GCP_CREDENTIALS"
         fi
 
         if [[ "${{github.ref}}" == "refs/heads/Dev" ]]; then
           echo "::set-output name=gcloud_project::$DEV_GCP_PROJECT"
-          echo "::set-output name=gcloud_settings::master"
+          echo "::set-output name=gcloud_settings::$DEV_GCP_CREDENTIALS"
         fi
 
     - name: Use conditional value
-      run: echo "${{ secrets.GCM_PROJECT }}"
+      run: echo "${{ steps.setvars.outputs.gcloud_project }}"
 
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0.2.0
       with:
         project_id: ${{ steps.setvars.outputs.gcloud_project }}
-        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        service_account_key: ${{ steps.setvars.outputs.gcloud_settings }}
         export_default_credentials: true
 
     - name: Check HelloWorld changes...
