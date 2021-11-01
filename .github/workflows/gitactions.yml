@@ -6,11 +6,6 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
-    env:
-      DEV_GCM_PROJECT: ${{ secrets.GCM_PROJECT }}
-      MASTER_GCM_PROJECT: "master"
-      DEV_GCP_CREDENTIALS: ${{ secrets.GCP_CREDENTIALS }}
-      MASTER_GCP_CREDENTIALS: "master"
     steps:
     - name: Checkout
       uses: actions/checkout@master
