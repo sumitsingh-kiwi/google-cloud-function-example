@@ -27,7 +27,7 @@ jobs:
 
         if [[ "${{github.ref}}" == "refs/heads/Dev" ]]; then
           echo "::set-output name=gcloud_project::$DEV_GCP_PROJECT"
-          echo "::set-output name=gcloud_credentials::$DEV_GCP_CREDENTIALS"
+          echo "::set-output name=gcloud_credentials::${{ secrets.GCP_CREDENTIALS }}"
         fi
 
     - name: Use conditional value
