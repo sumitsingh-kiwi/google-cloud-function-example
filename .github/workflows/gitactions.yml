@@ -7,6 +7,9 @@ jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
     runs-on: ubuntu-latest
+    env:
+      DEV_GCM_PROJECT: ${{ secrets.GCM_PROJECT }}
+      MASTER_GCM_PROJECT: "master"
     steps:
     - name: Checkout
       uses: actions/checkout@master
@@ -17,12 +20,12 @@ jobs:
       id: setvars
       run: |
         if [[ "${{github.ref}}" == "refs/heads/master" ]]; then
-          echo "::set-output name=gcloud_project::${GCP_PROJECT}"
+          echo "::set-output name=gcloud_project::$MASTER_GCP_PROJECT"
           echo "::set-output name=gcloud_settings::dev"
         fi
 
         if [[ "${{github.ref}}" == "refs/heads/Dev" ]]; then
-          echo "::set-output name=gcloud_project::master"
+          echo "::set-output name=gcloud_project::$DEV_GCP_PROJECT"
           echo "::set-output name=gcloud_settings::master"
         fi
 
