@@ -1,8 +1,7 @@
 name: cloudrun-deploy
 on:
   push:
-    branches:
-      - master
+    branches: [master, Dev]
 jobs:
   setup-build-publish-deploy:
     name: Setup, Build, Publish, and Deploy
