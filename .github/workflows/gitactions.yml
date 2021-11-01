@@ -17,27 +17,20 @@ jobs:
       with:
         fetch-depth: 100
 
-    - name: Set variables
-      id: setvars
-      run: |
-        if [[ "${{github.ref}}" == "refs/heads/master" ]]; then
-          echo "::set-output name=gcloud_project::$MASTER_GCP_PROJECT"
-          echo "::set-output name=gcloud_credentials::$MASTER_GCP_CREDENTIALS"
-        fi
-
-        if [[ "${{github.ref}}" == "refs/heads/Dev" ]]; then
-          echo "::set-output name=gcloud_project::$DEV_GCP_PROJECT"
-          echo "::set-output name=gcloud_credentials::${{ secrets.GCP_CREDENTIALS }}"
-        fi
-
-    - name: Use conditional value
-      run: echo "${{ steps.setvars.outputs.gcloud_project }}"
+    # Setup gcloud CLI
+    - uses: google-github-actions/setup-gcloud@v0.2.0
+      if: github.ref == 'refs/heads/Dev'
+      with:
+        project_id: ${{ secrets.GCP_PROJECT }}
+        service_account_key: ${{ secrets.GCP_CREDENTIALS }}
+        export_default_credentials: true
 
     # Setup gcloud CLI
     - uses: google-github-actions/setup-gcloud@v0.2.0
+      if: github.ref == 'refs/heads/master'
       with:
-        project_id: ${{ steps.setvars.outputs.gcloud_project }}
-        service_account_key: ${{ steps.setvars.outputs.gcloud_credentials }}
+        project_id: ${{ secrets.MASTER_GCP_PROJECT }}
+        service_account_key: ${{ secrets.MASTER_GCP_CREDENTIALS }}
         export_default_credentials: true
 
     - name: Check HelloWorld changes...
@@ -50,6 +43,6 @@ jobs:
     - name: Deploy
       if: steps.helloworld.outputs.changed == 'true'
       run: |
-        gcloud run deploy helloworld --source=hello_world --service-account ${{ secrets.GCP_EMAIL }} \
+        gcloud run deploy helloworld --source=hello_world \
         --platform managed --allow-unauthenticated --region=us-central1 \
         --set-env-vars=[LOCATION_GQL_URL="http://us-central1-leasera-200719.cloudfunctions.net/location"]
